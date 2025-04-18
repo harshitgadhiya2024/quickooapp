@@ -188,9 +188,10 @@ class _SearchScreenState extends State<SearchScreen> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.yellow,
+              color: Colors.black,
             ),
             child: IconButton(
+              color: Colors.white,
               onPressed: () {
                 setState(() {
                   final temp = fromController.text;
@@ -213,25 +214,25 @@ class _SearchScreenState extends State<SearchScreen> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(left: 20,right: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30),
+
               Text(
                 "Today do you want to?",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  vehicleTile("assets/images/1-removebg-preview.png", "Auto"),
-                  vehicleTile("assets/images/2-removebg-preview.png", "Car"),
-                  vehicleTile("assets/images/3-removebg-preview.png", "Bike"),
-                ],
-              ),
               SizedBox(height: 20),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     vehicleTile("assets/images/1-removebg-preview.png", "Auto"),
+              //     vehicleTile("assets/images/2-removebg-preview.png", "Car"),
+              //     vehicleTile("assets/images/3-removebg-preview.png", "Bike"),
+              //   ],
+              // ),
+              // SizedBox(height: 20),
               buildPickupDropContainer(),
               SizedBox(height: 20),
               Row(
@@ -293,7 +294,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   elevation: 0,
-                  backgroundColor: AppColor.bottomcurveColor,
+                  backgroundColor: Colors.black,
                   minimumSize: Size(double.infinity, 50),
                 ),
               ),

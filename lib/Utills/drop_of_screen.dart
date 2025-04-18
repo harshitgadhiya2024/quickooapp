@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_place/google_place.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:quickoo/Controller/route_selection_controller.dart';
 import 'package:quickoo/Utills/date_selection_screen.dart';
 import 'package:quickoo/Utills/route_selection_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +27,7 @@ class DropoffScreen extends StatefulWidget {
 
 class _DropoffScreenState extends State<DropoffScreen> {
   final TextEditingController dropoffController = TextEditingController();
+  final RouteController routeController = Get.put(RouteController());
   late GooglePlace googlePlace;
 
   List<Map<String, dynamic>> searchResults = [];
@@ -119,6 +123,8 @@ class _DropoffScreenState extends State<DropoffScreen> {
         dropoffController.text = selectedAddress;
         searchResults.clear();
         _addToSearchHistory(address);
+
+        routeController.dropoffAddress.value = address;
       });
       await Future.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;
@@ -182,11 +188,14 @@ class _DropoffScreenState extends State<DropoffScreen> {
         selectedAddress = result;
         dropoffController.text = selectedAddress;
         _addToSearchHistory(selectedAddress);
+        routeController.dropoffAddress.value = selectedAddress;
       });
+
 
       // If coming from SearchScreen, return the result directly
       if (widget.isFromSearchScreen) {
         Navigator.of(context).pop(selectedAddress);
+
       }
     }
 
@@ -200,6 +209,7 @@ class _DropoffScreenState extends State<DropoffScreen> {
       selectedAddress = address;
       dropoffController.text = address;
       _addToSearchHistory(address);
+      routeController.dropoffAddress.value = address;
     });
 
     // Check if we should return to SearchScreen

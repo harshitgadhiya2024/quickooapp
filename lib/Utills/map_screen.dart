@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:get/get.dart';
 import 'drop_of_screen.dart';
 import 'route_selection_screen.dart';
+import '../Controller/route_selection_controller.dart';
 
 class MapScreen extends StatefulWidget {
   final Position initialPosition;
@@ -28,6 +30,9 @@ class _MapScreenState extends State<MapScreen> {
   LatLng? _selectedLatLng;
   TextEditingController addressController = TextEditingController();
   bool isLoadingAddress = false;
+
+  // Get instance of RouteController
+  final RouteController routeController = Get.find<RouteController>();
 
   @override
   void initState() {
@@ -71,9 +76,12 @@ class _MapScreenState extends State<MapScreen> {
   void _proceedWithLocation() {
     if (addressController.text.isEmpty || addressController.text == "Unable to get address") return;
 
+    // Save the selected address in RouteController
+    routeController.selectedLatLng.value = _selectedLatLng!;
+    routeController.selectedAddress.value = addressController.text;
+
     // Check if we should return to SearchScreen
     if (widget.returnToSearchScreen == true) {
-      // Return the selected address back to the previous screen
       Navigator.pop(context, addressController.text);
       return;
     }
@@ -88,7 +96,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
       );
     } else if (widget.screenType == 'dropoff') {
-      // Navigate to SearchLocationScreen
+      // Navigate to RouteSelectionScreen
       Navigator.push(
         context,
         MaterialPageRoute(
