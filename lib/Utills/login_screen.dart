@@ -202,6 +202,42 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
+              SizedBox(height: 30,),
+              Row(
+                children: [
+                  Expanded(child: Divider(color: Colors.grey.shade300,)),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text("Or continue with",style: TextStyle(color: Colors.grey),),
+                  ),
+                  Expanded(child: Divider(color: Colors.grey.shade300,))
+                ],
+              ),
+              SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 75,
+                    width: 75,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey,width: 1)
+                    ),
+                      child: Center(child: Image.asset("assets/images/search.png",width: 40,height: 40,fit: BoxFit.contain))
+                  ),
+                  Container(
+                    height: 75,
+                    width:75,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey,width: 1)
+                    ),
+                    child: Center(child: Image.asset("assets/images/apple-logo (1).png",width: 40,height: 40,fit: BoxFit.contain))
+                  ),
+                ],
+              ),
             ],
           ),
         ),

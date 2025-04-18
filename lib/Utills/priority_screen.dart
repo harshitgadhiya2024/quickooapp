@@ -141,6 +141,18 @@ class _PriorityScreenState extends State<PriorityScreen> {
                 Text("Enable Daily Rides",style: TextStyle(fontSize: 20),)
               ],
             ),
+            Spacer(),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    minimumSize: Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
+                ),
+                onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (e) => EnableBookingScreen()));
+                },
+                child:Text("Next",style: TextStyle(fontSize: 18,color: Colors.white),)
+            ),
           ],
         ),
       ),

@@ -20,6 +20,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final GoogleSignInService _googleSignInService = GoogleSignInService();
 
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -82,14 +83,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding: const EdgeInsets.only(left: 15),
               child: InkWell(
                 onTap: () async{
-                  final user = await _googleSignInService.signInWithGoogle();
-                  if (user != null) {
+                  await _googleSignInService.disconnect();
+                  final userData = await _googleSignInService.signInWithGoogle();
+                  if (userData != null) {
+                    print("usedata: ${userData.keys}");
                     final prefs = await SharedPreferences.getInstance();
                     prefs.setBool('isLoggedIn', true);
 
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (context) =>  BottomNavigationBarScreen(userData: user),
+                        builder: (context) =>  BottomNavigationBarScreen(userData: userData),
                       ),
                           (route) => false,
                     );

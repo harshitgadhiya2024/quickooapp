@@ -39,12 +39,8 @@ class GoogleSignInService {
       return null;
     }
   }
-  Future<void> _saveUserData(Map<String, dynamic> userData) async {
 
-     final prefs = await SharedPreferences.getInstance();
-     prefs.setString('user_data', jsonEncode(userData));
-     prefs.setBool('is_logged_in', true);
-  }
+
 
   Future<bool> isLoggedIn() async {
     final prefs = await await SharedPreferences.getInstance();
@@ -54,6 +50,18 @@ class GoogleSignInService {
   Future<bool> isSignedIn() async {
     return await _googleSignIn.isSignedIn();
   }
+
+  Future<void> disconnect() async{
+   try{
+     if(await _googleSignIn.isSignedIn()){
+       await _googleSignIn.disconnect();
+     }
+   }
+   catch(e){
+     print('Disconnect Error: $e');
+   }
+  }
+
   Future<void> signOut() async {
     try {
       await _googleSignIn.signOut();

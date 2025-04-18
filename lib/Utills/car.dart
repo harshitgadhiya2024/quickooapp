@@ -122,7 +122,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
         searchResults.clear();
         _addToSearchHistory(address);
       });
-      routeController.pickupAddress.value = selectedAddress;
+      routeController.setPickupAddress(selectedAddress);
       await Future.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;
 
@@ -184,7 +184,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
         addressController.text = selectedAddress;
         _addToSearchHistory(selectedAddress);
       });
-        routeController.pickupAddress.value = selectedAddress;
+      routeController.setPickupAddress(selectedAddress);
       // If coming from SearchScreen, return the result directly
       if (widget.isFromSearchScreen) {
         Navigator.of(context).pop(selectedAddress);
@@ -201,7 +201,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
       addressController.text = address;
       _addToSearchHistory(address);
     });
-    routeController.pickupAddress.value = selectedAddress;
+    routeController.setPickupAddress(selectedAddress);
     // Check if we're coming from SearchScreen
     if (widget.isFromSearchScreen) {
       Navigator.of(context).pop(selectedAddress);

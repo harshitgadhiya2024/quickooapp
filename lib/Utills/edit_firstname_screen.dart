@@ -1,5 +1,7 @@
+import 'package:quickoo/Controller/update_user_data_controller.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'app_color.dart';
 
@@ -14,6 +16,101 @@ class EditFirstNameScreen extends StatefulWidget {
 
 class _EditFirstNameScreenState extends State<EditFirstNameScreen> {
   final TextEditingController fullNameController = TextEditingController();
+  final UpdateUserDataController updateUserDataController = Get.put(UpdateUserDataController());
+
+  void savefirstname() async {
+    var result = await updateUserDataController.UpdateuserData(firstname: fullNameController.text);
+    if (result["status"] == 200) {
+      print("Result: $result");
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: Colors.white,
+          titlePadding: EdgeInsets.zero,
+          title: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: const Text(
+              "Success",
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          content: const Text(
+            "Name Update Successfully",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context,fullNameController.text);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                side: const BorderSide(color: Colors.black),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text("OK", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: Colors.white,
+          titlePadding: EdgeInsets.zero,
+          title: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: const Text(
+              "Notification",
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          content:  Text(
+            result["message"].toString(),
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                side: const BorderSide(color: Colors.black),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text("OK", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
 
   @override
   void initState() {
@@ -25,41 +122,13 @@ class _EditFirstNameScreenState extends State<EditFirstNameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 60),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.bottomcurveColor),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(color: Colors.white),
-                    )),
-
-
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.bottomcurveColor),
-                    onPressed: () {
-                      Navigator.pop(context,fullNameController.text);
-                    },
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(color: Colors.white),
-                    )),
-
-              ],
-            ),
-            SizedBox(height: 70,),
+            SizedBox(height: 60,),
             const Text(
               "What's your full name?",
               style: TextStyle(
@@ -92,7 +161,35 @@ class _EditFirstNameScreenState extends State<EditFirstNameScreen> {
                 return null;
               },
             ),
+            Spacer(),
+            Padding(padding: EdgeInsets.only(bottom: 50),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18),
+                    )),
 
+
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.bottomcurveColor),
+                    onPressed: () {
+                      savefirstname();
+                    },
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18),
+                    )),
+              ],
+            ),)
           ],
         ),
       ),

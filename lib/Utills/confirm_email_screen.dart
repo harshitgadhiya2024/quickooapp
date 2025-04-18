@@ -24,12 +24,18 @@ class _ConfirmEmailScreenState extends State<ConfirmEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: BackButton(color: Colors.black),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 100,right: 20,left: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("What's your email?",
+            Text("What's your email?",
                 style: TextStyle(fontSize: 25, color: AppColor.textColor, fontWeight: FontWeight.bold)),
             SizedBox(height: 20,),
 

@@ -28,6 +28,12 @@ class _ConfirmPhoneScreenState extends State<ConfirmPhoneScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+       leading: BackButton(color: Colors.black),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 100, right: 20, left: 20),
         child: Form(
@@ -43,6 +49,7 @@ class _ConfirmPhoneScreenState extends State<ConfirmPhoneScreen> {
               Row(
                 children: [
                   Container(
+                    height: 55,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                       color: AppColor.textfieldColor,

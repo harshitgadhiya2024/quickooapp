@@ -37,6 +37,10 @@
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB-Z1yfO79TH2uuDT9-fu-0YmHCRL_B9IA"/>
 
+        <meta-data
+        android:name="com.google.android.gms.client_id"
+        android:value="421825921013-0pvet8cjjhmrmbruk1ukjt17f5amg530.apps.googleusercontent.com" />
+
         android:hardwareAccelerated="false"
 
     </application>

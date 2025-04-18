@@ -47,8 +47,9 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: BackButton(color: Colors.teal,),
+        leading: BackButton(color: Colors.black,),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -65,24 +66,26 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 26,
-          color: Colors.teal,
+          color: Colors.black,
           fontWeight: FontWeight.w500,
         ),
       ),
           Spacer(),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.lightBlue,
-                minimumSize: Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                  minimumSize: Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
+              ),
+                onPressed: () async{
+                await requestPermissions();
+                      _pickImageFromCamera();
+                },
+                child:Text("Take a picture",style: TextStyle(fontSize: 18,color: Colors.white),)
             ),
-              onPressed: () async{
-              await requestPermissions();
-                    _pickImageFromCamera();
-              },
-              child:Text("Take a picture",style: TextStyle(fontSize: 18,color: Colors.white),)
           ),
-          const SizedBox(height: 10),
           TextButton(
               onPressed: ()async{
                 await requestPermissions();
@@ -92,10 +95,11 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                   "Choose a picture",
                     style: TextStyle(
                     fontSize: 16,
-                    color: Colors.lightBlue,
+                    color: Colors.black,
                           ),
               )
-          )
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );

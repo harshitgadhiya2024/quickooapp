@@ -124,7 +124,7 @@ class _DropoffScreenState extends State<DropoffScreen> {
         searchResults.clear();
         _addToSearchHistory(address);
 
-        routeController.dropoffAddress.value = address;
+        routeController.setDropoffAddress(address);
       });
       await Future.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;
@@ -188,7 +188,7 @@ class _DropoffScreenState extends State<DropoffScreen> {
         selectedAddress = result;
         dropoffController.text = selectedAddress;
         _addToSearchHistory(selectedAddress);
-        routeController.dropoffAddress.value = selectedAddress;
+        routeController.setDropoffAddress(selectedAddress);
       });
 
 
