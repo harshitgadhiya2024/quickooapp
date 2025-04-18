@@ -1,7 +1,5 @@
-
+import 'package:quickoo/app_color.dart';
 import 'package:flutter/material.dart';
-
-import 'app_color.dart';
 
 class ConfirmPhoneScreen extends StatefulWidget {
   const ConfirmPhoneScreen({super.key});
@@ -28,6 +26,11 @@ class _ConfirmPhoneScreenState extends State<ConfirmPhoneScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+       leading: BackButton(color: Colors.black),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 100, right: 20, left: 20),
         child: Form(

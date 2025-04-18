@@ -1,9 +1,7 @@
-
+import 'package:quickoo/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
-import 'app_color.dart';
 
 class ConfirmEmailScreen extends StatefulWidget {
   const ConfirmEmailScreen({super.key});
@@ -24,6 +22,16 @@ class _ConfirmEmailScreenState extends State<ConfirmEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(
+            icon: const Icon(Icons.close, color: Colors.teal, size: 30),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 100,right: 20,left: 20),
         child: Column(
