@@ -1,8 +1,9 @@
-import 'package:quickoo/edit_firstname_screen.dart';
+
 
 import 'package:flutter/material.dart';
 
 import 'edit_dob_screen.dart';
+import 'edit_firstname_screen.dart';
 
 
 class EditPersonalDetailScreen extends StatefulWidget {

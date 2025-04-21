@@ -1,6 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:quickoo/Controller/googleAuth_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/custom_widgets.dart';
@@ -19,6 +22,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final GoogleSignInService _googleSignInService = GoogleSignInService();
+  final GoogleauthController googleauthController = Get.put(GoogleauthController());
 
 
   @override
@@ -86,9 +90,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   await _googleSignInService.disconnect();
                   final userData = await _googleSignInService.signInWithGoogle();
                   if (userData != null) {
-                    print("usedata: ${userData.keys}");
+                    if (userData["photoUrl"]!=null){
+                      googleauthController.saveProfileUrl(userData["photoUrl"].toString());
+                    }
+                     print("photoUrl: ${userData['photoUrl']}");
+                     googleauthController.saveFirstName(userData["displayName"].toString());
+                     googleauthController.saveEmail(userData["email"].toString());
+                     googleauthController.GoogleAuthData();
+                     print("usedata: ${userData.keys}");
                     final prefs = await SharedPreferences.getInstance();
                     prefs.setBool('isLoggedIn', true);
+
 
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(

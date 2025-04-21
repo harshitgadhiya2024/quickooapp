@@ -5,49 +5,32 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utills/globle_variable.dart';
-class SignupController extends GetxController {
+
+class GoogleauthController extends GetxController {
   String firstName = '';
-  String dob = '';
-  String gender = '';
-  String password = '';
   String email = '';
-  String phoneNumber = '';
+  String profileUrl = '';
 
   void saveFirstName(String name) {
     firstName = name;
-  }
-
-  void saveDOB(String value) {
-    dob = value;
-  }
-
-  void saveGender(String value) {
-    gender = value;
-  }
-
-  void savePassword(String value) {
-    password = value;
   }
 
   void saveEmail(String value) {
     email = value;
   }
 
-  void savePhoneNumber(String value) {
-    phoneNumber = value;
+  void saveProfileUrl(String value) {
+    profileUrl = value;
   }
 
-  Future<Map<String, Object>> SignupData() async {
+  Future<Map<String, Object>> GoogleAuthData() async {
     try {
-      final url = Uri.parse('https://quickoo.stylic.ai/quickoo/register-user');
+      final url = Uri.parse('https://quickoo.stylic.ai/quickoo/google-auth');
 
       final Map<String, dynamic> data = {
         'first_name': firstName,
-        'dob': dob,
-        'gender': gender,
-        'password': password,
         'email': email,
-        'phone_number': phoneNumber,
+        'profile_url' : profileUrl,
       };
 
       print("json data: ${data}");

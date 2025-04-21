@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:quickoo/Utills/google_signin_service.dart';
 import 'package:quickoo/Utills/signup_screen.dart';
 
 import '../Controller/login_controller.dart';
@@ -213,30 +214,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               SizedBox(height: 30,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    height: 75,
-                    width: 75,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey,width: 1)
-                    ),
-                      child: Center(child: Image.asset("assets/images/search.png",width: 40,height: 40,fit: BoxFit.contain))
-                  ),
-                  Container(
-                    height: 75,
-                    width:75,
-                    decoration: BoxDecoration(
+              Padding(
+                padding: const EdgeInsets.only(left: 100),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 65,
+                      width: 65,
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
                         border: Border.all(color: Colors.grey,width: 1)
+                      ),
+                        child: Center(child: Image.asset("assets/images/search.png",width: 30,height: 30,fit: BoxFit.contain))
                     ),
-                    child: Center(child: Image.asset("assets/images/apple-logo (1).png",width: 40,height: 40,fit: BoxFit.contain))
-                  ),
-                ],
+                    SizedBox(width: 30,),
+                    Container(
+                      height: 65,
+                      width:65,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey,width: 1)
+                      ),
+                      child: Center(child: Image.asset("assets/images/apple-logo (1).png",width: 30,height: 30,fit: BoxFit.contain))
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
