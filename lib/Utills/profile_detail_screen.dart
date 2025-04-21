@@ -42,7 +42,6 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: BackButton(color: Colors.black),
         backgroundColor: Colors.white,
@@ -53,14 +52,13 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               children: [
                 CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.black,
                   child: Icon(
                     Icons.person,
-                    color: Colors.white,
                     size: 70,
                   ),
                 ),
