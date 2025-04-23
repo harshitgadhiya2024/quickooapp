@@ -51,6 +51,11 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Call fetchUser() every time screen is opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      userDataController.fetchUserData();
+    });
+
     final user = userDataController.userModel.value!;
 
     return Scaffold(
@@ -67,112 +72,119 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      body: Obx(() {
+        if (userDataController.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-            Row(
-              children: [
-                user.isProfile
-                    ? CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.black,
-                    backgroundImage: NetworkImage(user.profileUrl)
-                )
-                    : CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.black,
-                    child: (const Icon(Icons.person,color: Colors.white,size: 40,))
+        final user = userDataController.userModel.value!;
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  user.isProfile
+                      ? CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.black,
+                      backgroundImage: NetworkImage(user.profileUrl)
+                  )
+                      : CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.black,
+                      child: (const Icon(Icons.person,color: Colors.white,size: 40,))
+                  ),
+                  SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user.firstName,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      ),
+                      Text(
+                        "NewComer",
+                        style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+              const Divider(thickness: 1),
+              const SizedBox(height: 10),
+              const Text(
+                "Personal Details",
+                style: TextStyle(
+                  color: AppColor.bottomcurveColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditFirstNameScreen(firstName: user.firstName),
+                    ),
+                  );
+
+                },
+                child: Row(
                   children: [
-                    Text(
-                      user.firstName,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Name", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                        Text(user.firstName, style: TextStyle(fontSize: 14, color: Colors.grey)),
+                      ],
                     ),
-                    Text(
-                      "NewComer",
-                      style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
-                    ),
+                    const Spacer(),
+                    const Icon(Icons.arrow_forward_ios_rounded, color: AppColor.bottomcurveColor),
                   ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            const Divider(thickness: 1),
-            const SizedBox(height: 10),
-            const Text(
-              "Personal Details",
-              style: TextStyle(
-                color: AppColor.bottomcurveColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
               ),
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EditFirstNameScreen(firstName: user.firstName),
-                  ),
-                );
+              const SizedBox(height: 10),
+              const Divider(thickness: 1),
+              const SizedBox(height: 10),
+              InkWell(
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditDobScreen(currentDob: dob),
+                    ),
+                  );
+                  if (result != null) {
+                    await saveDob(result);
+                    setState(() {
+                      dob = result;
+                    });
+                  }
+                },
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Date Of Birth", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                        Text(dob, style: TextStyle(fontSize: 14, color: Colors.grey)),
+                      ],
+                    ),
+                    const Spacer(),
+                    const Icon(Icons.arrow_forward_ios_rounded, color: AppColor.bottomcurveColor),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
 
-              },
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Name", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                      Text(user.firstName, style: TextStyle(fontSize: 14, color: Colors.grey)),
-                    ],
-                  ),
-                  const Spacer(),
-                  const Icon(Icons.arrow_forward_ios_rounded, color: AppColor.bottomcurveColor),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Divider(thickness: 1),
-            const SizedBox(height: 10),
-            InkWell(
-              onTap: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EditDobScreen(currentDob: dob),
-                  ),
-                );
-                if (result != null) {
-                  await saveDob(result);
-                  setState(() {
-                    dob = result;
-                  });
-                }
-              },
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Date Of Birth", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                      Text(dob, style: TextStyle(fontSize: 14, color: Colors.grey)),
-                    ],
-                  ),
-                  const Spacer(),
-                  const Icon(Icons.arrow_forward_ios_rounded, color: AppColor.bottomcurveColor),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -219,9 +219,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               SizedBox(height: 30,),
-              Padding(
-                padding: const EdgeInsets.only(left: 100),
-                child: Row(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
                       onTap :() async{
@@ -276,7 +275,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-              ),
             ],
           ),
         ),
