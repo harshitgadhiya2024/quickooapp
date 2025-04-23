@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickoo/Controller/mobile_otp_controller.dart';
 
 import '../Controller/signup_controller.dart';
 import '../widgets/custom_widgets.dart';
@@ -25,6 +26,7 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
   final SignupController signupController = Get.put(SignupController());
   String countryCode = "+91";
   bool isLoading = false;
+  final MobileOtpController mobileOtpController = Get.put(MobileOtpController());
 
   String generateOtp() {
     Random random = Random();
@@ -32,21 +34,23 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
     return otp.toString();
   }
 
-  void sendOtp() {
+  void sendOtp() async{
     if (_phoneKeyForm.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
       String otp = generateOtp();
-      print("otp in mobile number ${otp}");
-      String fullPhone = "$countryCode ${mobileNumberController.text}";
-      // signupController.savePhoneNumber(fullPhone);
+       print("otp in mobile number ${otp}");
+      String phone = "$countryCode ${mobileNumberController.text.trim()}";
+      // var response = await mobileOtpController.sendOtpToPhone(phone);
       setState(() {
         isLoading = false;
       });
+
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MobileOtpScreen(
-              phoneNumber: fullPhone, sendOtp: otp,)));
+            phoneNumber: phone, sendOtp: otp,)));
+
     }
   }
   void skipPhone() async {
@@ -143,6 +147,7 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
                   child: Row(
                     children: [
                       Container(
+                        height: 55,
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColor.textfieldColor,
@@ -261,11 +266,11 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
                         },
                         child: const Row(
                           children: [
-                            Icon(Icons.arrow_back_ios_new, size: 16,
+                            Icon(Icons.arrow_back_ios_new, size: 18,
                               color: Colors.white,),
                             SizedBox(width: 8,),
                             Text("Back", style: TextStyle(
-                                fontSize: 15, color: Colors.white,fontWeight: FontWeight.bold),),
+                                fontSize: 18, color: Colors.white,fontWeight: FontWeight.bold),),
                           ],
                         ),
                       ),
@@ -278,11 +283,11 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
                               "Next",
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 15,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(width: 8,),
-                            Icon(Icons.arrow_forward_ios_rounded, size: 16,
+                            Icon(Icons.arrow_forward_ios_rounded, size: 18,
                               color: Colors.white,)
                           ],
                         ),

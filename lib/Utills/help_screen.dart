@@ -44,7 +44,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: AppColor.bottomcurveColor,
+                  color: Colors.black,
                 ),
               ),
               const SizedBox(height: 40),

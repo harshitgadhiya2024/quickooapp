@@ -383,8 +383,11 @@ class _MobileOtpScreenState extends State<MobileOtpScreen> {
                     counterText: "",
                   ),
                   validator: (value) {
-                    if (value == null || value.length != 6) {
-                      return "Enter a valid 6-digit OTP";
+                    if (value == null || value.isEmpty) {
+                      return "OTP is required";
+                    }
+                    if (value.length != 6) {
+                      return "OTP must be 6 digits";
                     }
                     return null;
                   },

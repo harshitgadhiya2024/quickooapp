@@ -2,6 +2,7 @@ import 'package:quickoo/Controller/update_user_data_controller.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickoo/Controller/user_data_controller.dart';
 
 import 'app_color.dart';
 
@@ -17,6 +18,7 @@ class EditFirstNameScreen extends StatefulWidget {
 class _EditFirstNameScreenState extends State<EditFirstNameScreen> {
   final TextEditingController fullNameController = TextEditingController();
   final UpdateUserDataController updateUserDataController = Get.put(UpdateUserDataController());
+  final UserDataController userDataController = Get.put(UserDataController());
 
   void savefirstname() async {
     var result = await updateUserDataController.UpdateuserData(firstname: fullNameController.text);
@@ -49,9 +51,12 @@ class _EditFirstNameScreenState extends State<EditFirstNameScreen> {
           ),
           actions: [
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                await userDataController.fetchUserData();
                 Navigator.pop(context);
                 Navigator.pop(context,fullNameController.text);
+
+
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -118,6 +123,7 @@ class _EditFirstNameScreenState extends State<EditFirstNameScreen> {
     fullNameController.text = widget.firstName;
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {

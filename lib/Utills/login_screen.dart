@@ -2,12 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:quickoo/Controller/googleAuth_controller.dart';
 import 'package:quickoo/Utills/google_signin_service.dart';
 import 'package:quickoo/Utills/signup_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Controller/login_controller.dart';
 import '../widgets/custom_widgets.dart';
 import 'app_color.dart';
+import 'bottom_navigation_bar_screen.dart';
 import 'forgotpassword_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,6 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   final LoginController loginController = Get.put(LoginController());
+  final GoogleSignInService _googleSignInService = GoogleSignInService();
+  final GoogleauthController googleauthController = Get.put(GoogleauthController());
 
   bool obsecurePassword = true;
   bool rememberMe = false;
@@ -218,15 +223,45 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.only(left: 100),
                 child: Row(
                   children: [
-                    Container(
-                      height: 65,
-                      width: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                        border: Border.all(color: Colors.grey,width: 1)
+                    InkWell(
+                      onTap :() async{
+                        await _googleSignInService.disconnect();
+                        final userData = await _googleSignInService.signInWithGoogle();
+                        if (userData != null) {
+                          if (userData["photoUrl"]!=null){
+                            googleauthController.saveProfileUrl(userData["photoUrl"].toString());
+                          }
+                          print("photoUrl: ${userData['photoUrl']}");
+                          googleauthController.saveFirstName(userData["displayName"].toString());
+                          googleauthController.saveEmail(userData["email"].toString());
+                          googleauthController.GoogleAuthData();
+                          print("usedata: ${userData.keys}");
+                          final prefs = await SharedPreferences.getInstance();
+                          prefs.setBool('isLoggedIn', true);
+
+
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) =>  BottomNavigationBarScreen(userData: userData),
+                            ),
+                                (route) => false,
+                          );
+                        }
+                        else{
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Google sign-in failed. Please try again.')));
+                        }
+                      },
+                      child: Container(
+                        height: 65,
+                        width: 65,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey,width: 1)
+                        ),
+                          child: Center(child: Image.asset("assets/images/search.png",width: 30,height: 30,fit: BoxFit.contain))
                       ),
-                        child: Center(child: Image.asset("assets/images/search.png",width: 30,height: 30,fit: BoxFit.contain))
                     ),
                     SizedBox(width: 30,),
                     Container(

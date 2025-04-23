@@ -403,9 +403,9 @@ class _EmailOtpScreenState extends State<EmailOtpScreen> {
                       onTap: () => Navigator.of(context).pop(),
                       child: const Row(
                         children: [
-                          Icon(Icons.arrow_back_ios_new, size: 16, color: Colors.white),
+                          Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.white),
                           SizedBox(width: 8),
-                          Text("Back", style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text("Back", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -414,9 +414,9 @@ class _EmailOtpScreenState extends State<EmailOtpScreen> {
                       child: const Row(
                         children: [
                           SizedBox(width: 30),
-                          Text("Next", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
+                          Text("Next", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                           SizedBox(width: 8),
-                          Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.white),
+                          Icon(Icons.arrow_forward_ios_rounded, size: 18, color: Colors.white),
                         ],
                       ),
                     ),

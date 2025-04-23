@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:quickoo/Controller/user_data_controller.dart';
+import 'package:quickoo/Utills/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app_color.dart';
 import 'edit_dob_screen.dart';
@@ -12,13 +16,17 @@ class ProfileDetailScreen extends StatefulWidget {
 }
 
 class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
+
+  final UserDataController userDataController = Get.put(UserDataController());
   String firstName = "Harshit Gadhiya";
   String dob = "17-Nov-2000";
+
 
   @override
   void initState() {
     super.initState();
     loadProfileData();
+
   }
 
   Future<void> loadProfileData() async {
@@ -39,11 +47,23 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
     await prefs.setString('dob', value);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+    final user = userDataController.userModel.value!;
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: BackButton(color: Colors.black),
+        leading: InkWell(
+            onTap: () async{
+              Navigator.push(context, MaterialPageRoute(builder: (e) => ProfileScreen()));
+
+              await userDataController.fetchUserData();
+              },
+
+            child: Icon(Icons.arrow_back,color: Colors.black,)),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -52,22 +72,26 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             Row(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.black,
-                  child: Icon(
-                    Icons.person,
-                    size: 70,
-                  ),
+                user.isProfile
+                    ? CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.black,
+                    backgroundImage: NetworkImage(user.profileUrl)
+                )
+                    : CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.black,
+                    child: (const Icon(Icons.person,color: Colors.white,size: 40,))
                 ),
                 SizedBox(width: 15),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Harshit",
+                      user.firstName,
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
                     Text(
@@ -95,15 +119,10 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => EditFirstNameScreen(firstName: firstName),
+                    builder: (_) => EditFirstNameScreen(firstName: user.firstName),
                   ),
                 );
-                if (result != null) {
-                  await saveFirstName(result);
-                  setState(() {
-                    firstName = result;
-                  });
-                }
+
               },
               child: Row(
                 children: [
@@ -111,7 +130,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text("Name", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                      Text(firstName, style: TextStyle(fontSize: 14, color: Colors.grey)),
+                      Text(user.firstName, style: TextStyle(fontSize: 14, color: Colors.grey)),
                     ],
                   ),
                   const Spacer(),

@@ -110,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     );
                   }
                   else{
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Google sign-in failed. Please try again.')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Google sign-up failed. Please try again.')));
                   }
                   },
                 child: Row(
