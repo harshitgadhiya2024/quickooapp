@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:quickoo/Utills/app_color.dart';
+import 'package:quickoo/Utills/route_screen.dart';
 import 'drop_of_screen.dart';
 import 'route_selection_screen.dart';
 import '../Controller/route_selection_controller.dart';
@@ -101,10 +102,7 @@ class _MapScreenState extends State<MapScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RouteSelectionScreen(
-            dropoffAddress: addressController.text,
-            pickupAddress: widget.previousAddress ?? '',
-          ),
+          builder: (context) => MapRouteScreen(),
         ),
       );
     }
