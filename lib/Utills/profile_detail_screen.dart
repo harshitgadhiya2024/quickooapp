@@ -63,8 +63,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
       appBar: AppBar(
         leading: InkWell(
             onTap: () async{
-              Navigator.push(context, MaterialPageRoute(builder: (e) => ProfileScreen()));
-
+              Navigator.pop(context, true);
               await userDataController.fetchUserData();
               },
 
@@ -126,7 +125,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
               const SizedBox(height: 20),
               InkWell(
                 onTap: () async {
-                  final result = await Navigator.push(
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => EditFirstNameScreen(firstName: user.firstName),
@@ -153,18 +152,12 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
               const SizedBox(height: 10),
               InkWell(
                 onTap: () async {
-                  final result = await Navigator.push(
+                 await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => EditDobScreen(currentDob: dob),
+                      builder: (_) => EditDobScreen(currentDob: user.dob),
                     ),
                   );
-                  if (result != null) {
-                    await saveDob(result);
-                    setState(() {
-                      dob = result;
-                    });
-                  }
                 },
                 child: Row(
                   children: [

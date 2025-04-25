@@ -51,7 +51,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
           ),
           content: const Text(
-            "OTP verified successfully!",
+            "Password Change Sucessfully",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
           ),
           actions: [

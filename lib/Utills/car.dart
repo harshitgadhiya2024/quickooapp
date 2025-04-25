@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_place/google_place.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:quickoo/Controller/route_selection_controller.dart';
+import 'package:quickoo/Controller/user_verification%20_controller.dart';
 import 'package:quickoo/Utills/map_screen.dart';
 import 'app_color.dart';
 import 'drop_of_screen.dart';
@@ -24,6 +26,7 @@ class PickupLocationScreen extends StatefulWidget {
 class _PickupLocationScreenState extends State<PickupLocationScreen> {
   final TextEditingController addressController = TextEditingController();
   final RouteController routeController = Get.put(RouteController());
+  final UserVerificationController userVerificationController = Get.put(UserVerificationController());
   late GooglePlace googlePlace;
 
   List<Map<String, dynamic>> searchResults = [];
@@ -39,6 +42,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
   void initState() {
     super.initState();
     googlePlace = GooglePlace("AIzaSyB-Z1yfO79TH2uuDT9-fu-0YmHCRL_B9IA");
+
 
     addressController.addListener(() {
       if (addressController.text.isEmpty) {
@@ -215,167 +219,255 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      userVerificationController.checkVerification();
+    });
+
     final showClearIcon = addressController.text.isNotEmpty;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Select your pick-up ride",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 27)),
-            const SizedBox(height: 40),
-            TextField(
-              controller: addressController,
-              decoration: InputDecoration(
-                hintText: "Search location",
-                fillColor: Colors.grey.shade200,
-                filled: true,
-                border: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: showClearIcon
-                    ? IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    addressController.clear();
-                    setState(() {
-                      searchResults.clear();
-                      selectedAddress = '';
-                    });
-                  },
-                )
-                    : null,
-              ),
-              onChanged: _searchLocation,
-            ),
-            const SizedBox(height: 20),
-            if (searchResults.isNotEmpty)
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => const Divider(thickness: 1),
-                  itemCount: searchResults.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: const Icon(Icons.location_on,
-                          color: AppColor.bottomcurveColor),
-                      title: Text(searchResults[index]['address']),
-                      trailing: selectedLoadingIndex == index
-                          ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                          : const Icon(Icons.arrow_forward_ios_rounded, size: 18),
-                      onTap: () => _selectLocation(
-                        searchResults[index]['placeId'],
-                        searchResults[index]['address'],
-                        index,
-                      ),
-                    );
-                  },
+    return Obx((){
+      if(userVerificationController.isLoading.value){
+        return Scaffold(
+          body: Center(child: CircularProgressIndicator(),),
+        );
+      }
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 100),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!userVerificationController.isVerified.value)
+                  Container(
+                  margin: EdgeInsets.only(bottom: 30),
+                  alignment: Alignment.center,
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+
+                  decoration: BoxDecoration(
+                    borderRadius:  BorderRadius.circular(10),
+                    color: Colors.red,
+
+                  ),
+                  child: Text("Wait for administrater approval",style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
                 ),
-              )
-            else
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: _useCurrentLocation,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6.0, vertical: 8),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.my_location, color: Colors.blue),
-                            const SizedBox(width: 15),
-                            const Text(
-                              "Use Current Location",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.blue),
-                            ),
-                            const Spacer(),
-                            isCurrentLocationLoading
-                                ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                                : const Icon(Icons.arrow_forward_ios_rounded,
-                                size: 17, color: Colors.blue),
-                          ],
-                        ),
-                      ),
+                // SizedBox(height: 30,),
+                const Text("Select your pick-up ride",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 27)),
+                const SizedBox(height: 20),
+                userVerificationController.isVerified.value ?
+                TextField(
+                  controller: addressController,
+                  decoration: InputDecoration(
+                    hintText: "Search location",
+                    fillColor: Colors.grey.shade200,
+                    filled: true,
+                    border: const OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: showClearIcon
+                        ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        addressController.clear();
+                        setState(() {
+                          searchResults.clear();
+                          selectedAddress = '';
+                        });
+                      },
+                    )
+                        : null,
+                  ),
+                  onChanged: _searchLocation,
+                ) :
+                TextField(
+                  readOnly: true,
+                  controller: addressController,
+                  decoration: InputDecoration(
+                    hintText: "Search location",
+                    fillColor: Colors.grey.shade200,
+                    filled: true,
+                    border: const OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: showClearIcon
+                        ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        addressController.clear();
+                        setState(() {
+                          searchResults.clear();
+                          selectedAddress = '';
+                        });
+                      },
+                    )
+                        : null,
+                  ),
+                  onChanged: _searchLocation,
+                ),
+                const SizedBox(height: 20),
+                if (searchResults.isNotEmpty)
+                  Expanded(
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) => const Divider(thickness: 1),
+                      itemCount: searchResults.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: const Icon(Icons.location_on,
+                              color: AppColor.bottomcurveColor),
+                          title: Text(searchResults[index]['address']),
+                          trailing: selectedLoadingIndex == index
+                              ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                              : const Icon(Icons.arrow_forward_ios_rounded, size: 18),
+                          onTap: () => _selectLocation(
+                            searchResults[index]['placeId'],
+                            searchResults[index]['address'],
+                            index,
+                          ),
+                        );
+                      },
                     ),
-                    const SizedBox(height: 10),
-                    const Divider(thickness: 3),
-                    if (searchHistory.isNotEmpty)
-                      Expanded(
-                        child: ListView.separated(
-                          itemCount: searchHistory.length,
-                          separatorBuilder: (context, index) =>
-                          const Divider(thickness: 1),
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () async {
-                                setState(() {
-                                  selectedHistoryIndex = index;
-                                });
-                                await Future.delayed(
-                                    const Duration(milliseconds: 400));
-                                _selectFromHistory(searchHistory[index]);
-                                setState(() {
-                                  selectedHistoryIndex = null;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6.0, vertical: 8),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.history,
-                                        color: AppColor.bottomcurveColor,
-                                        size: 25),
-                                    const SizedBox(width: 15),
-                                    Expanded(
-                                      child: Text(
-                                        searchHistory[index],
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    selectedHistoryIndex == index
-                                        ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(strokeWidth: 2),
-                                    )
-                                        : const Icon(Icons.chevron_right,
-                                        color: Colors.black, size: 30),
-                                  ],
+                  )
+                else
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        userVerificationController.isVerified.value ?
+                        InkWell(
+                          onTap: _useCurrentLocation,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6.0, vertical: 8),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.my_location, color: Colors.blue),
+                                const SizedBox(width: 15),
+                                const Text(
+                                  "Use Current Location",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.blue),
                                 ),
+                                const Spacer(),
+                                isCurrentLocationLoading
+                                    ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                                    : const Icon(Icons.arrow_forward_ios_rounded,
+                                    size: 17, color: Colors.blue),
+                              ],
+                            ),
+                          ),
+                        ) :
+                        AbsorbPointer(
+                          child: InkWell(
+                            onTap: _useCurrentLocation,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6.0, vertical: 8),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.my_location, color: Colors.blue),
+                                  const SizedBox(width: 15),
+                                  const Text(
+                                    "Use Current Location",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.blue),
+                                  ),
+                                  const Spacer(),
+                                  isCurrentLocationLoading
+                                      ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  )
+                                      : const Icon(Icons.arrow_forward_ios_rounded,
+                                      size: 17, color: Colors.blue),
+                                ],
                               ),
-                            );
-                          },
+                            ),
+                          ),
                         ),
-                      ),
-                  ],
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
+                        const SizedBox(height: 10),
+                        const Divider(thickness: 3),
+                        if (searchHistory.isNotEmpty)
+                          Expanded(
+                            child: ListView.separated(
+                              itemCount: searchHistory.length,
+                              separatorBuilder: (context, index) =>
+                              const Divider(thickness: 1),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () async {
+                                    setState(() {
+                                      selectedHistoryIndex = index;
+                                    });
+                                    await Future.delayed(
+                                        const Duration(milliseconds: 400));
+                                    _selectFromHistory(searchHistory[index]);
+                                    setState(() {
+                                      selectedHistoryIndex = null;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6.0, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.history,
+                                            color: AppColor.bottomcurveColor,
+                                            size: 25),
+                                        const SizedBox(width: 15),
+                                        Expanded(
+                                          child: Text(
+                                            searchHistory[index],
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        selectedHistoryIndex == index
+                                            ? const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(strokeWidth: 2),
+                                        )
+                                            : const Icon(Icons.chevron_right,
+                                            color: Colors.black, size: 30),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+    });
   }
 }

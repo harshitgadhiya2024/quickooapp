@@ -3,6 +3,7 @@ import 'package:quickoo/Controller/update_user_data_controller.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quickoo/Controller/user_data_controller.dart';
 
 import 'app_color.dart';
 
@@ -19,6 +20,8 @@ class _EditDobScreenState extends State<EditDobScreen> {
 
   final TextEditingController birthDateController = TextEditingController();
   final UpdateUserDataController updateUserDataController = Get.put(UpdateUserDataController());
+  final UserDataController userDataController = Get.put(UserDataController());
+
 
   void savedob(String text) async {
     var result = await updateUserDataController.UpdateuserData(dob: birthDateController.text);
@@ -54,6 +57,7 @@ class _EditDobScreenState extends State<EditDobScreen> {
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.pop(context,birthDateController.text);
+                userDataController.fetchUserData();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,

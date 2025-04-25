@@ -54,6 +54,7 @@ class _EditFirstNameScreenState extends State<EditFirstNameScreen> {
               onPressed: () async {
                 Navigator.pop(context);
                 Navigator.pop(context,fullNameController.text);
+                userDataController.fetchUserData();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,

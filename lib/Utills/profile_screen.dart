@@ -31,6 +31,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   //   String userId = GlobleVariables.userId;
   //   await userDataController.fetchUserData(userId: userId);
   // }
+  bool isLoading = true;
+
 
   void _launchURL() async {
     final Uri url = Uri.parse('https://quickoo.in');
@@ -44,7 +46,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    userDataController.fetchUserData();
+    fetchUserData();
+  }
+  Future<void> fetchUserData() async {
+    // Set loading to true while fetching
+    setState(() {
+      isLoading = true;
+    });
+
+    await userDataController.fetchUserData();
+
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -132,10 +147,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: 20),
                 InkWell(
-                  onTap: () {
+                  onTap: () async{
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (e) => ProfilePictureScreen()),
                     );
+                    // Show loader
+                    userDataController.isLoading.value = true;
+
+                    // Fetch updated data
+                    await userDataController.fetchUserData();
+
+                    // Hide loader
+                    userDataController.isLoading.value = false;
                   },
                   child: Row(
                     children: [
