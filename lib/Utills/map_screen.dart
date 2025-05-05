@@ -76,7 +76,9 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _proceedWithLocation() {
-    if (addressController.text.isEmpty || addressController.text == "Unable to get address") return;
+    if (addressController.text.isEmpty ||
+        addressController.text == "Unable to get address")
+      return;
 
     // Save the selected address in RouteController
     routeController.selectedLatLng.value = _selectedLatLng!;
@@ -102,7 +104,11 @@ class _MapScreenState extends State<MapScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => MapRouteScreen(),
+          builder:
+              (context) => RouteSelectionScreen(
+                pickupAddress: routeController.pickupAddress.value,
+                dropoffAddress: addressController.text,
+              ),
         ),
       );
     }
@@ -114,7 +120,7 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _proceedWithLocation,
         backgroundColor: AppColor.bottomcurveColor,
-        child: const Icon(Icons.arrow_forward,color: Colors.white,),
+        child: const Icon(Icons.arrow_forward, color: Colors.white),
       ),
       body: Stack(
         children: [
@@ -125,14 +131,15 @@ class _MapScreenState extends State<MapScreen> {
             ),
             onMapCreated: (controller) => _mapController = controller,
             onTap: _onMapTapped,
-            markers: _selectedLatLng != null
-                ? {
-              Marker(
-                markerId: const MarkerId("selected"),
-                position: _selectedLatLng!,
-              ),
-            }
-                : {},
+            markers:
+                _selectedLatLng != null
+                    ? {
+                      Marker(
+                        markerId: const MarkerId("selected"),
+                        position: _selectedLatLng!,
+                      ),
+                    }
+                    : {},
           ),
 
           // Address input box
@@ -146,7 +153,7 @@ class _MapScreenState extends State<MapScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 4)
+                  BoxShadow(color: Colors.black12, blurRadius: 4),
                 ],
               ),
               child: Row(
@@ -161,20 +168,23 @@ class _MapScreenState extends State<MapScreen> {
                       readOnly: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: isLoadingAddress
-                            ? 'Fetching address...'
-                            : 'Selected Location',
-                        suffixIcon: isLoadingAddress
-                            ? const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2),
-                          ),
-                        )
-                            : null,
+                        hintText:
+                            isLoadingAddress
+                                ? 'Fetching address...'
+                                : 'Selected Location',
+                        suffixIcon:
+                            isLoadingAddress
+                                ? const Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                )
+                                : null,
                       ),
                     ),
                   ),
