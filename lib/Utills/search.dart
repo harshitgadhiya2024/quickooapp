@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickoo/Utills/app_color.dart';
 import 'package:quickoo/Utills/search_passenger_count_screen.dart';
+import '../Controller/save_ride_controller.dart';
 import 'car.dart';
 import 'drop_of_screen.dart';
 import 'passengers_screen.dart';
@@ -155,12 +156,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       );
                       return;
                     }
-
+                    final SaveRideController saveRideController = SaveRideController();
+                    saveRideController.setFrom(fromController.text.toString());
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DropoffScreen(
                           pickup: fromController.text,
+                          saveRideController: SaveRideController(),
                           isFromSearchScreen: true,
                         ),
                       ),

@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_place/google_place.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:quickoo/Controller/route_selection_controller.dart';
+import 'package:quickoo/Controller/save_ride_controller.dart';
 import 'package:quickoo/Controller/user_verification%20_controller.dart';
 import 'package:quickoo/Utills/map_screen.dart';
 import 'app_color.dart';
@@ -129,13 +130,15 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
       routeController.setPickupAddress(selectedAddress);
       await Future.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;
+      final SaveRideController saveRideController = SaveRideController();
 
       // Check if we're coming from SearchScreen
       if (widget.isFromSearchScreen) {
         Navigator.of(context).pop(selectedAddress);
       } else {
+        saveRideController.setFrom(selectedAddress);
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (e) => DropoffScreen(pickup: selectedAddress)));
+            builder: (e) => DropoffScreen(pickup: selectedAddress, saveRideController: saveRideController,)));
       }
     }
     setState(() {
@@ -170,6 +173,7 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
 
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+    final SaveRideController saveRideController = SaveRideController();
 
     final result = await Navigator.push(
       context,
@@ -177,7 +181,9 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
         builder: (context) => MapScreen(
           initialPosition: position,
           screenType: 'pickup',
-          returnToSearchScreen: widget.isFromSearchScreen, // Pass the flag here
+          returnToSearchScreen: widget.isFromSearchScreen,
+            saveRideController: saveRideController
+          // Pass the flag here
         ),
       ),
     );
@@ -206,14 +212,16 @@ class _PickupLocationScreenState extends State<PickupLocationScreen> {
       _addToSearchHistory(address);
     });
     routeController.setPickupAddress(selectedAddress);
+    final SaveRideController saveRideController = SaveRideController();
     // Check if we're coming from SearchScreen
     if (widget.isFromSearchScreen) {
       Navigator.of(context).pop(selectedAddress);
     } else {
+      saveRideController.setFrom(selectedAddress);
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DropoffScreen(pickup: selectedAddress),
+          builder: (context) => DropoffScreen(pickup: selectedAddress, saveRideController: saveRideController,),
         ),
       );
     }

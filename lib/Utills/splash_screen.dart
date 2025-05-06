@@ -4,7 +4,14 @@ import 'package:quickoo/Utills/home_screen.dart';
 import 'package:lottie/lottie.dart'; // Add this import
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final Widget nextScreen;
+  final String imagePath;
+  final String companyName;
+  final Duration duration;
+  final Color backgroundColor;
+  const SplashScreen({
+    super.key, required this.nextScreen, required this.imagePath, required this.duration, required this.backgroundColor, required this.companyName,
+  });
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -58,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               );
             },
             child: Image.asset(
-              'assets/logo.png', // Replace with your car app logo
+              widget.imagePath, // Replace with your car app logo
               width: 150,
               height: 150,
             ),
@@ -69,14 +76,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             width: 200,
             height: 100,
             child: Lottie.asset(
-              'assets/car_animation.json', // Add a car animation Lottie file
+              'assets/animation/car_animation.json', // Add a car animation Lottie file
               fit: BoxFit.contain,
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Your Car App Name',
-            style: TextStyle(
+          Text(
+            widget.companyName,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.blue,
@@ -84,9 +91,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ),
         ],
       ),
-      nextScreen: const HomeScreen(),
+      nextScreen: widget.nextScreen,
       duration: 3500,
-      backgroundColor: Colors.white,
+      backgroundColor: widget.backgroundColor,
       splashTransition: SplashTransition.fadeTransition,
       animationDuration: const Duration(milliseconds: 1000),
     );

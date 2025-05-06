@@ -3,17 +3,11 @@ import 'package:intl/intl.dart';
 import 'package:quickoo/Utills/app_color.dart';
 import 'package:quickoo/Utills/passengers_screen.dart';
 
+import '../Controller/save_ride_controller.dart';
+
 class TimePickupScreen extends StatefulWidget {
-  final String? pickupAddress;
-  final String? dropoffAddress;
-  final double? distance;
-  final int? duration;
-  final DateTime? selectedDate;
-
-  const TimePickupScreen({
-    super.key, this.pickupAddress, this.dropoffAddress, this.distance, this.duration, this.selectedDate,
-
-  });
+  final SaveRideController saveRideController;
+  const TimePickupScreen({super.key, required this.saveRideController,});
 
   @override
   State<TimePickupScreen> createState() => _TimePickupScreenState();
@@ -44,17 +38,11 @@ class _TimePickupScreenState extends State<TimePickupScreen> {
 
   void _goToPassengerScreen() {
     if (selectedTime != null) {
+      widget.saveRideController.setStartTime(selectedTime.toString());
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PassengersScreen(
-              pickupAddress: widget.pickupAddress,
-              dropoffAddress: widget.dropoffAddress,
-              distance: widget.distance,
-              duration: widget.duration,
-              selectedDate: widget.selectedDate,
-              selectedTime: selectedTime
-
+          builder: (context) => PassengersScreen(saveRideController: widget.saveRideController,
           ),
         ),
       );

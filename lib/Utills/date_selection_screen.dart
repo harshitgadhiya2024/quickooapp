@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quickoo/Utills/time_pickup_screen.dart';
 
-class DateSelectionScreen extends StatefulWidget {
-  final String? pickupAddress;
-  final String? dropoffAddress;
-  final double? distance;
-  final int? duration;
+import '../Controller/save_ride_controller.dart';
 
-  const DateSelectionScreen({super.key, this.pickupAddress, this.dropoffAddress, this.distance, this.duration});
+class DateSelectionScreen extends StatefulWidget {
+  final SaveRideController saveRideController;
+  const DateSelectionScreen({super.key, required this.saveRideController,});
 
   @override
   State<DateSelectionScreen> createState() => _DateSelectionScreenState();
@@ -187,11 +185,12 @@ class _DateSelectionScreenState extends State<DateSelectionScreen> {
                             });
 
                             // Navigate to time selection screen after a short delay
+                            widget.saveRideController.setStartDate(date.toString());
                             Future.delayed(const Duration(milliseconds: 300), () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => TimePickupScreen(),
+                                  builder: (context) => TimePickupScreen(saveRideController: widget.saveRideController,),
                                 ),
                               );
                             });

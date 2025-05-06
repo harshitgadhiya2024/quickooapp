@@ -1,26 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:quickoo/Utills/priority_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Controller/save_ride_controller.dart';
 import 'app_color.dart';
 
 
 class PassengersScreen extends StatefulWidget {
-  const PassengersScreen({
-    super.key,
-    this.pickupAddress,
-    this.dropoffAddress,
-    this.distance,
-    this.duration,
-    this.selectedDate,
-    this.selectedTime,
-  });
-
-  final String? pickupAddress;
-  final String? dropoffAddress;
-  final double? distance;
-  final int? duration;
-  final DateTime? selectedDate;
-  final TimeOfDay? selectedTime;
+  final SaveRideController saveRideController;
+  const PassengersScreen({super.key, required this.saveRideController,});
 
   @override
   State<PassengersScreen> createState() => _PassengersScreenState();
@@ -45,19 +32,10 @@ class _PassengersScreenState extends State<PassengersScreen> {
   Future<void> _savePassengerCountAndNavigate() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('passengerCount', passengerCount);
-
+    widget.saveRideController.setCount(passengerCount);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PriorityScreen(
-
-        pickupAddress: widget.pickupAddress,
-        dropoffAddress: widget.dropoffAddress,
-        distance: widget.distance,
-        duration: widget.duration,
-        selectedDate: widget.selectedDate,
-        selectedTime: widget.selectedTime,
-        passengerCount: passengerCount,
-      )),
+      MaterialPageRoute(builder: (context) => PriorityScreen(saveRideController: widget.saveRideController,)),
     );
   }
 
@@ -99,19 +77,17 @@ class _PassengersScreenState extends State<PassengersScreen> {
             ),
             const SizedBox(height: 40),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
                   onPressed: _decrement,
                   icon: const Icon(Icons.remove_circle_outline_outlined),
                   iconSize: 40,
                 ),
-                const SizedBox(width: 85),
                 Text(
                   passengerCount.toString(),
                   style: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(width: 85),
                 IconButton(
                   onPressed: _increment,
                   icon: const Icon(Icons.add_circle_outline),

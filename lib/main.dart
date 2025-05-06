@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Utills/app_color.dart';
 import 'Utills/bottom_navigation_bar_screen.dart';
 import 'Utills/home_screen.dart';
 import 'Utills/login_screen.dart';
+import 'Utills/splash_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +33,12 @@ class MyApp extends StatelessWidget {
     }
     return   MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: startScreen
+        home: SplashScreen(
+          imagePath: 'assets/images/blacklogo.png',  // Your logo path
+          nextScreen: startScreen,      // Your home screen
+          backgroundColor: AppColor.textColor,
+          duration: Duration(milliseconds: 6000), companyName: 'Quickoo',
+        )
     );
   }
 }

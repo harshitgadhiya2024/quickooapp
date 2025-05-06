@@ -4,10 +4,12 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_place/google_place.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:quickoo/Controller/route_selection_controller.dart';
+import 'package:quickoo/Controller/save_ride_controller.dart';
+import 'package:quickoo/Utills/city_map_screen.dart';
 import 'package:quickoo/Utills/date_selection_screen.dart';
-import 'package:quickoo/Utills/route_selection_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Controller/city_map_controller.dart';
 import 'app_color.dart';
 import 'map_screen.dart';
 
@@ -15,11 +17,13 @@ class DropoffScreen extends StatefulWidget {
   const DropoffScreen({
     Key? key,
     required this.pickup,
+    required this.saveRideController,
     this.isFromSearchScreen = false // Add this parameter
   }) : super(key: key);
 
   final String pickup;
-  final bool isFromSearchScreen; // Add this property
+  final bool isFromSearchScreen;
+  final SaveRideController saveRideController;// Add this property
 
   @override
   State<DropoffScreen> createState() => _DropoffScreenState();
@@ -130,13 +134,12 @@ class _DropoffScreenState extends State<DropoffScreen> {
       if (!mounted) return;
 
       // Check if we should return to SearchScreen
+      widget.saveRideController.setTo(selectedAddress);
       if (widget.isFromSearchScreen) {
         Navigator.of(context).pop(selectedAddress);
       } else {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (e) => RouteSelectionScreen(
-                pickupAddress: widget.pickup,
-                dropoffAddress: selectedAddress)));
+            builder: (e) => CityMapScreen(from: widget.pickup, to: selectedAddress, saveRideController: widget.saveRideController,)));
       }
     }
     setState(() {
@@ -179,7 +182,9 @@ class _DropoffScreenState extends State<DropoffScreen> {
             initialPosition: position,
             screenType: 'dropoff',
             previousAddress: widget.pickup,
-            returnToSearchScreen: widget.isFromSearchScreen),
+            returnToSearchScreen: widget.isFromSearchScreen,
+          saveRideController: widget.saveRideController,
+        ),
       ),
     );
 
@@ -211,7 +216,8 @@ class _DropoffScreenState extends State<DropoffScreen> {
       _addToSearchHistory(address);
       routeController.dropoffAddress.value = address;
     });
-
+    final SaveRideController saveRideController = SaveRideController();
+    widget.saveRideController.setTo(selectedAddress);
     // Check if we should return to SearchScreen
     if (widget.isFromSearchScreen) {
       Navigator.of(context).pop(address);
@@ -219,7 +225,7 @@ class _DropoffScreenState extends State<DropoffScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RouteSelectionScreen(pickupAddress: widget.pickup, dropoffAddress: address),
+          builder: (context) => CityMapScreen(from: widget.pickup, to: selectedAddress, saveRideController: widget.saveRideController),
         ),
       );
     }

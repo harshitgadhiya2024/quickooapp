@@ -4,15 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:quickoo/Utills/bottom_navigation_bar_screen.dart';
 
 class EnableBookingScreen extends StatefulWidget {
-  const EnableBookingScreen({super.key, this.pickupAddress, this.dropoffAddress, this.distance, this.duration, this.selectedDate, this.selectedTime, this.passengerCount, this.selectedDays});
-  final String? pickupAddress;
-  final String? dropoffAddress;
-  final double? distance;
-  final int? duration;
-  final DateTime? selectedDate;
-  final TimeOfDay? selectedTime;
-  final int? passengerCount;
-  final Map<String, bool>? selectedDays;
+  const EnableBookingScreen({super.key});
 
   @override
   State<EnableBookingScreen> createState() => _EnableBookingScreenState();

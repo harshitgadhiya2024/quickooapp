@@ -3,10 +3,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
+import 'package:quickoo/Controller/save_ride_controller.dart';
 import 'package:quickoo/Utills/app_color.dart';
+import 'package:quickoo/Utills/city_map_screen.dart';
 import 'package:quickoo/Utills/route_screen.dart';
 import 'drop_of_screen.dart';
-import 'route_selection_screen.dart';
 import '../Controller/route_selection_controller.dart';
 
 class MapScreen extends StatefulWidget {
@@ -14,13 +15,15 @@ class MapScreen extends StatefulWidget {
   final String screenType;
   final String? previousAddress;
   final bool? returnToSearchScreen; // Add this parameter
+  final SaveRideController saveRideController;
 
   const MapScreen({
     Key? key,
     required this.initialPosition,
     required this.screenType,
     this.previousAddress,
-    this.returnToSearchScreen, // Initialize the parameter
+    this.returnToSearchScreen,
+    required this.saveRideController,// Initialize the parameter
   }) : super(key: key);
 
   @override
@@ -92,22 +95,21 @@ class _MapScreenState extends State<MapScreen> {
 
     // Original navigation logic
     if (widget.screenType == 'pickup') {
-      // Navigate to DropoffScreen
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DropoffScreen(pickup: addressController.text),
+          builder: (context) => DropoffScreen(pickup: addressController.text, saveRideController: widget.saveRideController,),
         ),
       );
     } else if (widget.screenType == 'dropoff') {
-      // Navigate to RouteSelectionScreen
       Navigator.push(
         context,
         MaterialPageRoute(
           builder:
-              (context) => RouteSelectionScreen(
-                pickupAddress: routeController.pickupAddress.value,
-                dropoffAddress: addressController.text,
+              (context) => CityMapScreen(
+                from: routeController.pickupAddress.value,
+                to: addressController.text,
+                saveRideController: widget.saveRideController,
               ),
         ),
       );

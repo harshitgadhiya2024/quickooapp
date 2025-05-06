@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:quickoo/Utills/enable_booking_screen.dart';
 
-class PriorityScreen extends StatefulWidget {
-  final String? pickupAddress;
-  final String? dropoffAddress;
-  final double? distance;
-  final int? duration;
-  final DateTime? selectedDate;
-  final TimeOfDay? selectedTime;
-  final int? passengerCount;
+import '../Controller/save_ride_controller.dart';
 
-  const PriorityScreen({super.key, this.pickupAddress, this.dropoffAddress, this.distance, this.duration, this.selectedDate, this.selectedTime, this.passengerCount});
+class PriorityScreen extends StatefulWidget {
+  final SaveRideController saveRideController;
+  const PriorityScreen({super.key, required this.saveRideController,});
 
   @override
   State<PriorityScreen> createState() => _PriorityScreenState();
@@ -64,20 +59,34 @@ class _PriorityScreenState extends State<PriorityScreen> {
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        List<String> getSelectedDays(Map<String, bool> selectedDays) {
+                          return selectedDays.entries
+                              .where((entry) => entry.value == true)
+                              .map((entry) => entry.key.toLowerCase()) // Convert to lowercase to match API format
+                              .toList();
+                        }
+                        List<String> trueDays = getSelectedDays(selectedDays);
+                        widget.saveRideController.setIsDaily(true);
+                        widget.saveRideController.setDays(trueDays);
+                        bool success = await widget.saveRideController.submitRideData();
+                        success ?
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text('Ride created successfully!'),
+                          ),
+                        ) : ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Failed to create ride.'),
+                          ),
+                        );
                         Navigator.pop(context, true);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (e) => EnableBookingScreen(
-                              pickupAddress: widget.pickupAddress,
-                              dropoffAddress: widget.dropoffAddress,
-                              distance: widget.distance,
-                              duration: widget.duration,
-                              selectedDate: widget.selectedDate,
-                              selectedTime: widget.selectedTime,
-                              passengerCount: widget.passengerCount,
-                              selectedDays: selectedDays,
                             ),
                           ),
                         );
@@ -148,7 +157,29 @@ class _PriorityScreenState extends State<PriorityScreen> {
                     minimumSize: Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  List<String> getSelectedDays(Map<String, bool> selectedDays) {
+                    return selectedDays.entries
+                        .where((entry) => entry.value == true)
+                        .map((entry) => entry.key.toLowerCase()) // Convert to lowercase to match API format
+                        .toList();
+                  }
+                  List<String> trueDays = getSelectedDays(selectedDays);
+                  widget.saveRideController.setIsDaily(false);
+                  widget.saveRideController.setDays(trueDays);
+                  bool success = await widget.saveRideController.submitRideData();
+                  success ?
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text('Ride created successfully!'),
+                    ),
+                  ) : ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text('Failed to create ride.'),
+                    ),
+                  );
                     Navigator.push(context, MaterialPageRoute(builder: (e) => EnableBookingScreen()));
                 },
                 child:Text("Next",style: TextStyle(fontSize: 18,color: Colors.white),)
