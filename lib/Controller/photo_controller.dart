@@ -13,6 +13,7 @@ class ProfileController extends GetxController {
 
   Future<void> uploadProfilePhoto(File image) async {
     isLoading.value = true;
+    await GlobleVariables.loadSavedUserId();
     String url = "https://quickoo.stylic.ai/upload-profile-photo";
       print("upload pic: $image");
     try {

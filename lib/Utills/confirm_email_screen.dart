@@ -41,6 +41,7 @@ class _ConfirmEmailScreenState extends State<ConfirmEmailScreen> {
   bool otpSent = false;
   bool isLoading = false;
   bool isVerifying = false;
+  bool emailInitialized = false;
 
   bool canResend = false;
   int resendTimer = 30;
@@ -98,7 +99,10 @@ class _ConfirmEmailScreenState extends State<ConfirmEmailScreen> {
           return Center(child: CircularProgressIndicator(),);
         }
         final user = userDataController.userModel.value!;
-        emailController.text = user.email;
+        if (!emailInitialized) {
+          emailController.text = user.email;
+          emailInitialized = true;
+        }
         return Padding(
           padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
           child: Form(

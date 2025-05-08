@@ -52,7 +52,7 @@ class _SearchPassengerCountScreenState extends State<SearchPassengerCountScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 40),
+            // const SizedBox(height: 20),
             const Text(
               "How many passengers?",
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
@@ -60,13 +60,19 @@ class _SearchPassengerCountScreenState extends State<SearchPassengerCountScreen>
             ),
             const SizedBox(height: 40),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FloatingActionButton(
-                  heroTag: 'decrement',
-                  onPressed: decrement,
-                  child: const Icon(Icons.remove),
-                  mini: true,
+                SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: FloatingActionButton(
+
+                    heroTag: 'decrement',
+                    onPressed: decrement,
+
+                    child: const Icon(Icons.remove,size: 30,),
+                    mini: true,
+                  ),
                 ),
                 const SizedBox(width: 50),
                 Text(
@@ -74,11 +80,15 @@ class _SearchPassengerCountScreenState extends State<SearchPassengerCountScreen>
                   style: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 50),
-                FloatingActionButton(
-                  heroTag: 'increment',
-                  onPressed: increment,
-                  child: const Icon(Icons.add),
-                  mini: true,
+                SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: FloatingActionButton(
+                    heroTag: 'increment',
+                    onPressed: increment,
+                    child: const Icon(Icons.add,size: 30,),
+                    mini: true,
+                  ),
                 ),
               ],
             ),

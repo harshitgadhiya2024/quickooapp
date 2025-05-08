@@ -95,6 +95,7 @@ class _MapScreenState extends State<MapScreen> {
 
     // Original navigation logic
     if (widget.screenType == 'pickup') {
+      widget.saveRideController.setFrom(addressController.text);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -102,6 +103,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
       );
     } else if (widget.screenType == 'dropoff') {
+      widget.saveRideController.setTo(addressController.text);
       Navigator.push(
         context,
         MaterialPageRoute(

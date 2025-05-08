@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickoo/Utills/globle_variable.dart';
 
 // Model for Ride
 class Ride {
@@ -57,7 +58,8 @@ class PastRidesController {
   String? errorMessage;
 
   Future<void> fetchPastRides() async {
-    const userId = 'b17bdd1a-a046-468a-90fa-1129190f6f67';
+    await GlobleVariables.loadSavedUserId();
+    var userId = GlobleVariables.userId;
     isLoading = true;
     errorMessage = null;
 

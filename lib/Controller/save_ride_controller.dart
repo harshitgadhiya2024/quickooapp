@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:quickoo/Utills/globle_variable.dart';
 
 class SaveRideController {
-  String? userId = GlobleVariables.userId;
+
+  String? userId = "";
   String? from;
   String? to;
   List<String>? cities;
@@ -55,6 +56,7 @@ class SaveRideController {
 
   // Method to submit ride data to the API
   Future<bool> submitRideData() async {
+    GlobleVariables.loadSavedUserId();
     try {
       var request = http.MultipartRequest(
         'POST',

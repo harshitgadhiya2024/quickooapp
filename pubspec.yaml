@@ -91,6 +91,7 @@ flutter:
     - assets/images/banner.png
     - assets/animation/Animation - 1744001051518 (1).json
     - assets/google_pay_config.json
+    - assets/animation/car_animation.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

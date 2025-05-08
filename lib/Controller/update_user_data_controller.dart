@@ -32,6 +32,7 @@ class UpdateUserDataController extends GetxController {
       } else {
         data = {'dob': dob};
       }
+      await GlobleVariables.loadSavedUserId();
       data["user_id"] = GlobleVariables.userId;
 
       final response = await http.post(url, body: data);

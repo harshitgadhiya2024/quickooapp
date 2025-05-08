@@ -33,12 +33,16 @@ class MyApp extends StatelessWidget {
     }
     return   MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(
-          imagePath: 'assets/images/blacklogo.png',  // Your logo path
-          nextScreen: startScreen,      // Your home screen
-          backgroundColor: AppColor.textColor,
-          duration: Duration(milliseconds: 6000), companyName: 'Quickoo',
+        home: EnhancedSplashScreen(
+
+          nextScreen: startScreen,
+          logoPath: 'assets/images/blacklogo.png',
+          companyName: 'Quickoo',
+          duration: const Duration(seconds: 4), // Changed from milliseconds to seconds for better control
+          primaryColor: AppColor.bottomcurveColor, // Use your app's primary color
+          secondaryColor: AppColor.bottomcurveColor.withBlue(180), //
         )
     );
   }
 }
+

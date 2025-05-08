@@ -46,7 +46,7 @@ class GoogleauthController extends GetxController {
         print("GlobalVariables.regId :- ${GlobleVariables.userId}");
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
-        await prefs.setString('userId', GlobleVariables.userId);
+        await prefs.setString('userId', user_id);
         return {
           'user_id': user_id,
           'status': status,

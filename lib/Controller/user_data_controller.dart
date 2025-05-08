@@ -84,6 +84,7 @@ class UserDataController extends GetxController {
   Future<void> fetchUserData() async {
     isLoading.value = true;
     try {
+      await GlobleVariables.loadSavedUserId();
       final url = Uri.parse('https://quickoo.stylic.ai/quickoo/get-user-data');
 
       final Map<String, dynamic> data = {
